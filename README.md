@@ -3,11 +3,12 @@
 unpy is a Cython wrapper for the c_api offered by universal.
 
 ## Installation
-On most linux distros with CPython 2.7, 3.4, 3.5, 3.6, or 3.7, unpy should work out of the box:
+On most linux distros with CPython 2.7, 3.4, 3.5, 3.6, or 3.7, unpy should (eventually) work out of the box:
 
 ```
 pip install unpy
 ```
+Right now, it does not work, and no attempt has been made to ship it.
 
 ## Building
 Some things have been changed in the CMake build files:
