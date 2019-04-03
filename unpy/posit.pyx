@@ -1,7 +1,7 @@
- # cython: language_level=3
+# cython: language_level=3
 
 from libc.stdint cimport *
-cimport cposit
+from . cimport cposit
 
 # special values and c helpers
 #cdef _p32_one = cposit.ui32_to_p32(1)
@@ -15,6 +15,25 @@ cdef inline cposit.posit32_t _p32_abs(cposit.posit32_t f):
     return f
 # these tricks won't work well with larger posit types...
 
+
+cdef demo_foobarbaz():
+    cdef cposit.posit32_t x = cposit.posit32_fromsi(1)
+    cdef cposit.posit32_t y = cposit.posit32_fromsi(-3)
+
+    cdef int xd = cposit.posit32_tosi(x)
+    cdef int yd = cposit.posit32_tosi(y)
+
+    cdef cposit.posit32_t x_y = cposit.posit32_add(x, y)
+    cdef int x_yd = cposit.posit32_tosi(x_y)
+
+    print(xd, yd, x_yd)
+    print(cposit.posit32_cmp(x, y))
+    print(cposit.posit32_cmp(x, x))
+    print(cposit.posit32_cmp(x, x_y))
+
+    return 0
+
+demo_foobarbaz()
 
 cdef class Posit32:
 
