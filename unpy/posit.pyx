@@ -305,3 +305,32 @@ cpdef str posit32_str(Posit32 a):
     cposit.posit32_str(buf, a._c_posit)
     cdef bytes s = buf
     return s.decode('ascii')
+
+# math functions
+cpdef Posit32 posit32_add(Posit32 a, Posit32 b):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_add(a._c_posit, b._c_posit)
+    return obj
+
+cpdef Posit32 posit32_sub(Posit32 a, Posit32 b):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_sub(a._c_posit, b._c_posit)
+    return obj
+
+cpdef Posit32 posit32_mul(Posit32 a, Posit32 b):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_mul(a._c_posit, b._c_posit)
+    return obj
+
+cpdef Posit32 posit32_div(Posit32 a, Posit32 b):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_div(a._c_posit, b._c_posit)
+    return obj
+
+cpdef int posit32_cmp(Posit32 a, Posit32 b):
+    return cposit.posit32_cmp(a._c_posit, b._c_posit)
+
+cpdef Posit32 posit32_sqrt(Posit32 a):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_sqrt(a._c_posit)
+    return obj

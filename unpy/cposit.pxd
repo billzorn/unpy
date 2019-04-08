@@ -51,6 +51,6 @@ cdef extern from '../universal/posit/posit_c_api.h':
     posit32_t posit32_mul( posit32_t, posit32_t );
     posit32_t posit32_div( posit32_t, posit32_t );
 
-    int32_t posit32_cmp( posit32_t, posit32_t );
+    int posit32_cmp( posit32_t, posit32_t );
 
     posit32_t posit32_sqrt( posit32_t );
