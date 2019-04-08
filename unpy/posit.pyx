@@ -3,8 +3,8 @@
 from libc.stdint cimport *
 from . cimport cposit
 
+
 # special values and c helpers
-#cdef _p32_one = cposit.ui32_to_p32(1)
 
 cdef inline cposit.posit32_t _p32_neg(cposit.posit32_t f):
     f.v = -f.v
@@ -13,27 +13,9 @@ cdef inline cposit.posit32_t _p32_neg(cposit.posit32_t f):
 cdef inline cposit.posit32_t _p32_abs(cposit.posit32_t f):
     f.v = <uint32_t> abs(<int32_t> f.v)
     return f
+
 # these tricks won't work well with larger posit types...
 
-
-cdef demo_foobarbaz():
-    cdef cposit.posit32_t x = cposit.posit32_fromsi(1)
-    cdef cposit.posit32_t y = cposit.posit32_fromsi(-3)
-
-    cdef int xd = cposit.posit32_tosi(x)
-    cdef int yd = cposit.posit32_tosi(y)
-
-    cdef cposit.posit32_t x_y = cposit.posit32_add(x, y)
-    cdef int x_yd = cposit.posit32_tosi(x_y)
-
-    print(xd, yd, x_yd)
-    print(cposit.posit32_cmp(x, y))
-    print(cposit.posit32_cmp(x, x))
-    print(cposit.posit32_cmp(x, x_y))
-
-    return 0
-
-demo_foobarbaz()
 
 cdef class Posit32:
 
@@ -66,6 +48,22 @@ cdef class Posit32:
         """
         cdef Posit32 obj = Posit32.__new__(Posit32)
         obj._c_posit = cposit.posit32_fromd(value)
+        return obj
+
+    @staticmethod
+    def from_signed(long long value):
+        """Factory function to create a Posit32 object from a double.
+        """
+        cdef Posit32 obj = Posit32.__new__(Posit32)
+        obj._c_posit = cposit.posit32_fromsll(value)
+        return obj
+
+    @staticmethod
+    def from_unsigned(unsigned long long value):
+        """Factory function to create a Posit32 object from a double.
+        """
+        cdef Posit32 obj = Posit32.__new__(Posit32)
+        obj._c_posit = cposit.posit32_fromull(value)
         return obj
 
     # convenience interface for use inside Python
@@ -202,31 +200,108 @@ cdef class Posit32:
 
     # comparison
 
-    # cpdef bint eq(self, Posit32 other):
-    #     return cposit.p32_eq(self._c_posit, other._c_posit)
+    def __lt__(self, Posit32 other):
+        return self.cmp(other) < 0
 
-    # cpdef bint le(self, Posit32 other):
-    #     return cposit.p32_le(self._c_posit, other._c_posit)
+    def __le__(self, Posit32 other):
+        return self.cmp(other) <= 0
 
-    # cpdef bint lt(self, Posit32 other):
-    #     return cposit.p32_lt(self._c_posit, other._c_posit)
+    def __eq__(self, Posit32 other):
+        return self.cmp(other) == 0
 
-    # def __lt__(self, Posit32 other):
-    #     return self.lt(other)
+    def __ne__(self, Posit32 other):
+        return not (self.cmp(other) == 0)
 
-    # def __le__(self, Posit32 other):
-    #     return self.le(other)
+    def __ge__(self, Posit32 other):
+        return self.cmp(other) >= 0
 
-    # def __eq__(self, Posit32 other):
-    #     return self.eq(other)
+    def __gt__(self, Posit32 other):
+        return self.cmp(other) > 0
 
-    # def __ne__(self, Posit32 other):
-    #     return not self.eq(other)
 
-    # def __ge__(self, Posit32 other):
-    #     return other.le(self)
+# wrap functions from the c API headers
 
-    # def __gt__(self, Posit32 other):
-    #     return other.lt(self)
+cpdef Posit32 posit32_fromd(double value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromd(value)
+    return obj
 
-    # conversion to other posit types
+# these will not normally be usable from within Python,
+# as it can't natively pass a float or lond double argument
+cpdef Posit32 posit32_fromf(float value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromf(value)
+    return obj
+
+cpdef Posit32 posit32_fromld(long double value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromld(value)
+    return obj
+
+# these integer conversions should all have the same behavior
+# besides shorter types rejecting Python integers over a
+# certain size
+cpdef Posit32 posit32_fromsi(int value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsi(value)
+    return obj
+
+cpdef Posit32 posit32_fromsl(long value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsl(value)
+    return obj
+
+cpdef Posit32 posit32_fromsll(long long value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsll(value)
+    return obj
+
+cpdef Posit32 posit32_fromui(unsigned int value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsi(value)
+    return obj
+
+cpdef Posit32 posit32_fromul(unsigned long value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsl(value)
+    return obj
+
+cpdef Posit32 posit32_fromull(unsigned long long value):
+    cdef Posit32 obj = Posit32.__new__(Posit32)
+    obj._c_posit = cposit.posit32_fromsll(value)
+    return obj
+
+# turn posits into other things...
+cpdef double posit32_tod(Posit32 a):
+    return cposit.posit32_tod(a._c_posit)
+
+cpdef float posit32_tof(Posit32 a):
+    return cposit.posit32_tof(a._c_posit)
+
+cpdef long double posit32_told(Posit32 a):
+    return cposit.posit32_told(a._c_posit)
+
+cpdef int posit32_tosi(Posit32 a):
+    return cposit.posit32_tosi(a._c_posit)
+
+cpdef long posit32_tosl(Posit32 a):
+    return cposit.posit32_tosl(a._c_posit)
+
+cpdef long long posit32_tosll(Posit32 a):
+    return cposit.posit32_tosll(a._c_posit)
+
+cpdef unsigned int posit32_toui(Posit32 a):
+    return cposit.posit32_toui(a._c_posit)
+
+cpdef unsigned long posit32_toul(Posit32 a):
+    return cposit.posit32_toul(a._c_posit)
+
+cpdef unsigned long long posit32_toull(Posit32 a):
+    return cposit.posit32_toull(a._c_posit)
+
+# strings are a little different
+cpdef str posit32_str(Posit32 a):
+    cdef char buf[cposit.posit32_str_SIZE]
+    cposit.posit32_str(buf, a._c_posit)
+    cdef bytes s = buf
+    return s.decode('ascii')

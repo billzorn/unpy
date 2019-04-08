@@ -7,6 +7,7 @@ posit_ext = setuptools.Extension(
     'unpy.posit', ['unpy/posit.c'],
     include_dirs=['universal/posit/'],
     extra_objects=['universal/build/c_api/posit/libposit_c_api.a'],
+    language='c++',
 )
 
 setuptools.setup(

@@ -40,7 +40,7 @@ cdef extern from '../universal/posit/posit_c_api.h':
     unsigned long posit32_toul( posit32_t );
     unsigned long long posit32_toull( posit32_t );
 
-    posit32_str(char *, posit32_t);
+    void posit32_str(char *, posit32_t);
 
     # /*----------------------------------------------------------------------------
     # | Math functions.
