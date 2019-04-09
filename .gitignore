@@ -1,3 +1,9 @@
 *~
-wheelhouse/
 .env/
+build/
+dist/
+wheelhouse/
+unpy.egg-info/
+unpy/__pycache__/
+unpy/posit.c
+unpy/posit.cpython*.so
