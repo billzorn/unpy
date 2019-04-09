@@ -1,38 +1,47 @@
 # unpy
 
-unpy is a Cython wrapper for the c_api offered by universal.
+unpy is a Cython wrapper for the c_api offered by [universal](https://github.com/stillwater-sc/universal).
 
 ## Installation
-On most linux distros with CPython 2.7, 3.4, 3.5, 3.6, or 3.7, unpy should (eventually) work out of the box:
+On most linux distros with CPython 2.7, 3.4, 3.5, 3.6, or 3.7, unpy should work out of the box:
 
 ```
-pip install unpy
+pip install -i https://testpypi.python.org/pypi unpy
 ```
-Right now, it does not work, and no attempt has been made to ship it.
+
+Right now, it has only been shipped to Test PyPI, so availability may be dependent on
+the last time the Test PyPI repository was wiped, and the package should in general
+be considered unstable.
 
 ## Building
-Some things have been changed in the CMake build files:
-```diff
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index cbb4254..18f2aa8 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -129,7 +129,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        # include code quality flags
-        set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -Wall -Wpedantic -Wno-narrowing -Wno-deprecated")
-        # specific flags for debug and release builds
--       set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} -O3")
-+       set(EXTRA_C_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE} -g -O2 -fPIC")
-        set(EXTRA_C_FLAGS_DEBUG "${EXTRA_C_FLAGS_DEBUG} -g3 -pthread")
- elseif(MSVC)
-        # Streaming SIMD Extension (SSE) ISA
-@@ -218,7 +218,7 @@ endif()
- ####
- # set the aggregated compiler options
- set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${EXTRA_C_FLAGS}")
--set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${EXTRA_C_FLAGS_RELEASE}")
-+set(CMAKE_CXX_FLAGS_RELEASE "${EXTRA_C_FLAGS_RELEASE}")
- set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} ${EXTRA_C_FLAGS_DEBUG}")
- 
- if(PROFILE AND (CMAKE_COMPILER_IS_GNUCXX OR MINGW OR
+Astonishingly, universal has build options which allow its c_api library to work
+with Cython out of the box. The process has been captured in the provided Makefile.
+
 ```
+make lib
+```
+will build the universal library, assuming the submodule is checked out and in good shape.
+```
+make libtest
+```
+will test the library, assuming it is already built.
+```
+make inplace
+```
+will build the module in place, while
+```
+make wheel
+```
+will build a binary wheel distribution in dist/, though this will not be portable
+beyond the system used to build it.
+
+To build widely compatible manylinux1 wheels, run `docker-build-wheels.sh` on a suitable image.
+Such an image must be based manylinux1, but have a local GCC 8.3.0 compiled and available
+in `/usr/local/gcc-8.3.0/bin/`. For some background on obtaining such a thing, see
+[this issue](https://github.com/pypa/manylinux/issues/118#issuecomment-472380364).
+
+Some helpful commands:
+```
+sudo docker run -u $(id -u) --rm -v `pwd`:/io -ti billzorn/manylinux1-gcc8.3:1.0 /io/docker-build-wheels.sh
+```
+Where `billzorn/manylinux1-gcc8.3:1.0` is the local tag of the suitable docker image.
