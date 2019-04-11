@@ -12,7 +12,7 @@ posit_ext = setuptools.Extension(
 
 setuptools.setup(
     name='unpy',
-    version='0.0.0',
+    version='0.0.1',
     author='Bill Zorn',
     author_email='bill.zorn@gmail.com',
     url='https://github.com/billzorn/unpy',
