@@ -1,6 +1,6 @@
 from libc.stdint cimport *
 
-cdef extern from '../universal/posit/posit_c_api.h':
+cdef extern from 'include/posit_c_api.h':
 
     # some important quantities
     enum:

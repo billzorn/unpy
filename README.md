@@ -21,19 +21,29 @@ with Cython out of the box. The process has been captured in the provided Makefi
 make lib
 ```
 will build the universal library, assuming the submodule is checked out and in good shape.
+It will also move the library and headers into the appropriate locations.
 ```
 make libtest
 ```
 will test the library, assuming it is already built.
 ```
+make cython
+```
+will compile the Cython module to C,
+```
 make inplace
 ```
-will build the module in place, while
+will build the module in place, and
 ```
 make wheel
 ```
 will build a binary wheel distribution in dist/, though this will not be portable
 beyond the system used to build it.
+```
+make sdist
+```
+will build a source distribution in dist/, though this WILL NOT WORK
+unless `make lib` and `make cython` have been run.
 
 To build widely compatible manylinux1 wheels, run `docker-build-wheels.sh` on a suitable image.
 Such an image must be based manylinux1, but have a local GCC 8.3.0 compiled and available
@@ -43,5 +53,7 @@ in `/usr/local/gcc-8.3.0/bin/`. For some background on obtaining such a thing, s
 Some helpful commands:
 ```
 sudo docker run -u $(id -u) --rm -v `pwd`:/io -ti billzorn/manylinux1-gcc8.3:1.0 /io/docker-build-wheels.sh
+make sdist
+twine upload --repository-url https://test.pypi.org/legacy/ wheelhouse/* dist/*
 ```
 Where `billzorn/manylinux1-gcc8.3:1.0` is the local tag of the suitable docker image.

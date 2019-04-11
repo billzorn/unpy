@@ -5,8 +5,8 @@ with open('README.md', 'rt') as f:
 
 posit_ext = setuptools.Extension(
     'unpy.posit', ['unpy/posit.c'],
-    include_dirs=['universal/posit/'],
-    extra_objects=['universal/build/c_api/posit/libposit_c_api.a'],
+    include_dirs=['unpy/include/'],
+    extra_objects=['unpy/lib/libposit_c_api.a'],
     language='c++',
 )
 
@@ -21,6 +21,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=['unpy'],
     ext_modules=[posit_ext],
+    package_data={
+        'unpy': ['include/*.h', 'lib/*.a'],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Operating System :: POSIX :: Linux',
@@ -31,5 +34,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',
         'License :: OSI Approved :: MIT License',
-    ]
+    ],
 )

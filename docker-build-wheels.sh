@@ -3,7 +3,9 @@ set -e -x
 cd /io/
 
 # clear out existing module builds, which may be for the wrong system
+make libclean
 make clean
+make distclean
 
 #####################################
 # build the universal posit library #
@@ -23,7 +25,7 @@ export CXX=/usr/local/gcc-8.3.0/bin/g++-8.3.0
 make lib
 make cython
 
-# cleanup 1
+# cleanup
 deactivate
 rm -rf .cmake
 
