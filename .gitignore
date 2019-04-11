@@ -5,5 +5,7 @@ dist/
 wheelhouse/
 unpy.egg-info/
 unpy/__pycache__/
+unpy/include/
+unpy/lib/
 unpy/posit.c
 unpy/posit.cpython*.so
