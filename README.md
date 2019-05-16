@@ -58,4 +58,4 @@ make sdist
 twine upload --repository-url https://test.pypi.org/legacy/ wheelhouse/* dist/*
 pip --no-cache-dir install -i https://testpypi.python.org/pypi unpy
 ```
-Where `billzorn/manylinux1-gcc8.3:1.0` is the local tag of the suitable docker image.
+Where `billzorn/manylinux1-gcc8:1.2` is the local tag of the suitable docker image.
