@@ -6,13 +6,13 @@ with open('README.md', 'rt') as f:
 posit_ext = setuptools.Extension(
     'unpy.posit', ['unpy/posit.c'],
     include_dirs=['unpy/include/'],
-    extra_objects=['unpy/lib/libposit_c_api.a'],
+    extra_objects=['unpy/lib/libposit_c_api_shim.a'],
     language='c++',
 )
 
 setuptools.setup(
     name='unpy',
-    version='0.0.1',
+    version='0.0.2',
     author='Bill Zorn',
     author_email='bill.zorn@gmail.com',
     url='https://github.com/billzorn/unpy',

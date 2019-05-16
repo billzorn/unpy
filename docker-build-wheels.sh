@@ -19,8 +19,10 @@ pip install cmake cython
 
 export CFLAGS="-static-libstdc++"
 export CXXFLAGS="-static-libstdc++"
-export CC=/usr/local/gcc-8.3.0/bin/gcc-8.3.0
-export CXX=/usr/local/gcc-8.3.0/bin/g++-8.3.0
+export CC="${GCC_PATH}/bin/gcc"
+export CXX="${GCC_PATH}/bin/g++"
+
+export PATH="${GCC_PATH}/bin:${PATH}"
 
 make lib
 make cython
@@ -35,12 +37,12 @@ rm -rf .cmake
 
 rm -f wheelhouse/*.whl
 
-for PYBIN in /opt/python/*/bin; do
-    "${PYBIN}/pip" wheel . -w wheelhouse/
+for pybin in /opt/python/*/bin; do
+    "${pybin}/pip" --no-cache-dir wheel . -w wheelhouse/
 done
 
 for whl in wheelhouse/*.whl; do
-    auditwheel repair "$whl" -w wheelhouse/
+    auditwheel repair --plat "${1}" "${whl}" -w wheelhouse/
 done
 
 rm wheelhouse/*linux_x86_64.whl

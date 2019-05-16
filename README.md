@@ -46,14 +46,16 @@ will build a source distribution in dist/, though this WILL NOT WORK
 unless `make lib` and `make cython` have been run.
 
 To build widely compatible manylinux1 wheels, run `docker-build-wheels.sh` on a suitable image.
-Such an image must be based manylinux1, but have a local GCC 8.3.0 compiled and available
-in `/usr/local/gcc-8.3.0/bin/`. For some background on obtaining such a thing, see
+Such an image must be based manylinux1, but have a local GCC 8.3.0 compiled and available.
+For some background on obtaining such a thing, see
 [this issue](https://github.com/pypa/manylinux/issues/118#issuecomment-472380364).
+I am working on publishing suitable docker images.
 
 Some helpful commands:
 ```
-sudo docker run -u $(id -u) --rm -v `pwd`:/io -ti billzorn/manylinux1-gcc8.3:1.0 /io/docker-build-wheels.sh
+docker run -u $(id -u) --rm -v `pwd`:/io -ti billzorn/manylinux1-gcc8:1.2 /io/docker-build-wheels.sh manylinux1_x86_64
 make sdist
 twine upload --repository-url https://test.pypi.org/legacy/ wheelhouse/* dist/*
+pip --no-cache-dir install -i https://testpypi.python.org/pypi unpy
 ```
 Where `billzorn/manylinux1-gcc8.3:1.0` is the local tag of the suitable docker image.
